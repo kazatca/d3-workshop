@@ -1,0 +1,16 @@
+path{
+  fill: #909090;
+}
+
+.x-axis text{
+  text-anchor: middle;
+}
+
+.y-axis text{
+  text-anchor: end;
+}
+
+.tick line{
+  stroke: gray;
+  stroke-width: 1;
+}
