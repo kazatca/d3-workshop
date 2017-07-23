@@ -1,32 +1,46 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 
-import Tick from './Tick.js';
+import Tick from './Tick.jsx';
 
-class Axis extends Component{
-  render(){
-    const {position, formatValue, width, height, scales, ...props} = this.props;
-    const axis = ['left', 'right'].indexOf(position) != -1 ? 'y': 'x'; 
-    
-    const ticks = this.props.ticks || scales[axis].ticks(this.props.ticksCount);
+class Axis extends Component {
+  static propTypes = {
+    position: PropTypes.oneOf(['left', 'right', 'top', 'bottom']).isRequired,
+    formatValue: PropTypes.func,
+    ticks: PropTypes.array,
+    ticksCount: PropTypes.number
+  };
 
-    const size = -(axis == 'x' ? height: width);
+  static defaultProps = {
+    ticksCount: 8,
+    formatValue: value => `${value}`
+  };
+  
+  render() {
+    const {
+      position, formatValue, ticks, ticksCount, 
+      // this props Chart passes to all children by cloneElement 
+      width, height, scales, // eslint-disable-line react/prop-types
+      ...props
+    } = this.props;
+    const axis = ['left', 'right'].includes(position) ? 'y': 'x'; 
+    const ticksArray = ticks || scales[axis].ticks(ticksCount);
+    const size = (axis == 'x' ? height: width);
 
-    // shapeRendering="crispEdges"
     return (
       <g
         transform={`translate(${ position == 'right'? width: 0 }, ${ position == 'bottom' ? height: 0 })`}
         {...props}
       >
-        {ticks.map( tick => <Tick 
+        {ticksArray.map( tick => <Tick 
           key={tick}
           position={position}
-          offset={scales[axis](tick) + 0.5} //0.5 for thinner lines
-          size={size}
+          offset={scales[axis](tick) + 0.5} // 0.5 for thinner lines
+          size={-size}
           text={formatValue(tick)}
-          textMargin={9}
         />)}
       </g>);
   }
-};
+}
 
 export default Axis;

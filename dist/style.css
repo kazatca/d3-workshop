@@ -1,16 +1,24 @@
-path{
-  fill: #909090;
-}
-
-.x-axis text{
-  text-anchor: middle;
-}
-
-.y-axis text{
-  text-anchor: end;
-}
-
 .tick line{
-  stroke: gray;
+  stroke: #e2e2e2;
   stroke-width: 1;
+}
+
+.tick text{
+  font-family: "monospace";
+  font-size: 10px;
+  fill: #9a9d9e;
+
+}
+
+.chart-back{
+  fill: #f7f9fa;
+}
+
+.chart-line{
+  stroke: #e9edef;
+  stroke-width: 2;
+}
+
+input[type=range]{
+  width: 400px;
 }

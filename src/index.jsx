@@ -1,51 +1,22 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {render} from 'react-dom';
 import * as d3 from 'd3';
 
-import PriceChart from './PriceChart.jsx';
+import App from './App.jsx';
 
-import {fictionalData, smallData} from './investChartMockData.js';
+const wiki = require('../mocks/wiki.json');  // eslint-disable-line no-unused-vars
+const aapl = require('../mocks/aapl.json');  // eslint-disable-line no-unused-vars
 
 window.d3 = d3;
 
 const timeParse = d3.timeParse('%Y-%m-%d');
 
-const data = fictionalData.map( ({date, open}) => ({
-  date: timeParse(date), 
-  price: open
-}) );
-
-class App extends Component{
-  constructor(props){
-    super(props);
-    this.state = {dataLength: 100}
-  }
-
-  getDataSlice(){
-    return data.slice(Math.floor(-data.length * this.state.dataLength / 100))
-  }
-
-  render(){
-    return (
-      <div>
-        <PriceChart 
-          width={900} 
-          height={190} 
-          data={this.getDataSlice()}
-        />
-        <div>
-          <label htmlFor="data-length">Data length</label>
-          <input 
-            type="range" 
-            id="data-length"
-            onChange={ ({target}) => this.setState({dataLength: target.value}) }
-            value={ this.state.dataLength }
-          />
-        </div>
-      </div>);
-  }
-}
+const data = wiki
+  .map( ({date, price}) => ({
+    date: timeParse(date), 
+    price: price * 10
+  }) );
 
 render(
-  <App />,
+  <App data={data}/>,
   document.getElementById('app'));
