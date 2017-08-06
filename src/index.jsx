@@ -5,13 +5,14 @@ import * as d3 from 'd3';
 import PriceChart from './PriceChart.jsx';
 import BarChart from './BarChart.js';
 
-import {fictionalData, smallData} from './investChartMockData.js';
+const wiki = require('../mocks/wiki.json');  // eslint-disable-line no-unused-vars
+const aapl = require('../mocks/aapl.json');  // eslint-disable-line no-unused-vars
 
 window.d3 = d3;
 
 const timeParse = d3.timeParse('%Y-%m-%d');
 
-const data = fictionalData.map( ({date, open}) => ({
+const data = wiki.map( ({date, open}) => ({
   date: timeParse(date), 
   price: open
 }) );
@@ -67,5 +68,5 @@ class App extends Component{
 }
 
 render(
-  <App />,
+  <App data={data}/>,
   document.getElementById('app'));

@@ -1,7 +1,6 @@
 import React from 'react';
 import {PlotComponent} from './Plot.js';
 import PropTypes from 'prop-types';
-import {scalesProp, valuesProp } from './propTypes';
 import * as d3 from 'd3';
 
 const bisect = (data, date) => {
@@ -25,7 +24,10 @@ const defState = {x: 0, visible: false, index: 0};
 
 class Tooltip extends PlotComponent{
   static propTypes = {
-    formats: valuesProp,
+    formats: PropTypes.shape({
+      x: PropTypes.func.isRequired,
+      y: PropTypes.func.isRequired
+    }),
   };
 
   static defaultProps = {
