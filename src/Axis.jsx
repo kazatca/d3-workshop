@@ -1,10 +1,13 @@
-import React, {Component} from 'react';
+import React from 'react';
+import {PlotComponent} from './Plot.js';
 
 import Tick from './Tick.js';
 
-class Axis extends Component{
+class Axis extends PlotComponent{
   render(){
-    const {position, formatValue, width, height, scales, ...props} = this.props;
+    const {position, formatValue, geo, scales} = this.props;
+    const {width, height} = geo;
+
     const axis = ['left', 'right'].indexOf(position) != -1 ? 'y': 'x'; 
     
     const ticks = this.props.ticks || scales[axis].ticks(this.props.ticksCount);
@@ -15,7 +18,6 @@ class Axis extends Component{
     return (
       <g
         transform={`translate(${ position == 'right'? width: 0 }, ${ position == 'bottom' ? height: 0 })`}
-        {...props}
       >
         {ticks.map( tick => <Tick 
           key={tick}

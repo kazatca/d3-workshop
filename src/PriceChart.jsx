@@ -3,8 +3,8 @@ import * as d3 from 'd3';
 
 import Chart from './Chart.jsx';
 import Axis from './Axis.jsx';
-
-
+import Tooltip from './Tooltip.js';
+import Plot from './Plot';
 const getTimeTicks = data => {
   const startDate = data[0].date;
   const endDate = data[data.length - 1].date;
@@ -38,18 +38,32 @@ const getTimeFormat = data => {
 }
 
 class PriceChart extends Component{
-
   render(){
-    const {data, width, height} = this.props;
+    const {data, values, width, height} = this.props;
     const xTicks = getTimeTicks(data);
+
+    const plotGeo = {
+      left: 50,
+      top: 10,
+      width: width - 60,
+      height: height - 40
+    };
+
+    const xScale = d3.scaleTime()
+      .rangeRound([0, plotGeo.width])
+      .domain(d3.extent(data, values.x));
+    
+    const yScale = d3.scaleLinear()
+      .rangeRound([plotGeo.height, 0])
+      .domain([0, d3.max(data, values.y)*1.2]);
 
     return (
       <svg width={width} height={height} >
-        <Chart 
-          data={data} 
-          transform={`translate(${50}, ${10})`} 
-          width={width - 60} 
-          height={height - 40}
+        <Plot
+          geo={plotGeo}
+          data={data}
+          scales={{x: xScale, y: yScale}}
+          values={values}
         >
           <Axis 
             className="x-axis"
@@ -63,7 +77,14 @@ class PriceChart extends Component{
             ticksCount={4} 
             formatValue={price => `$${price}`}
           />
-        </Chart>
+          <Chart />
+          <Tooltip
+            formats={{
+              x: d3.timeFormat('%d %b %Y'),
+              y: value => `$${value}`
+            }}
+          />
+        </Plot>
       </svg>
     );
   }
